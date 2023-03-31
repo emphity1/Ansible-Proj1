@@ -1,0 +1,40 @@
+# tasks file for /home/dima/Desktop/ansible/roles/liferay
+---
+
+
+
+- name: Install PostgreSQL packages
+  yum:
+    name:
+      - postgresql{{postgresql_version}}
+      - postgresql{{postgresql_version}}-server
+    state: present
+
+- name: Initialize PostgreSQL database
+  become_user: postgres
+  command: /usr/pgsql-{{ postgresql_version }}/bin/initdb -D /var/lib/pgsql/{{ postgresql_version }}/data
+  
+- name: Start PostgreSQL service
+  systemd:
+    name: postgresql-{{ postgresql_version }}
+    state: started
+    enabled: true
+
+- name: Configure PostgreSQL
+  become_user: postgres
+  lineinfile:
+    path: /var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf
+    regexp: ^#?listen_addresses\s*=\s*'\*'
+    line: listen_addresses = '*'
+
+ 
+
+- name: Restart PostgreSQL service
+  become_user: postgres
+  service: "name=postgresql-{{ postgresql_version }} state=started enabled=yes"
+  #systemd:
+   # name: postgresql-{{ postgresql_version }}
+    #state: restarted
+
+
+    

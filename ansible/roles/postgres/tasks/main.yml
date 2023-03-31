@@ -1,0 +1,6 @@
+# tasks file for /home/dima/Desktop/ansible/roles/liferay
+---
+
+#- include_tasks: postgresql_install.yml
+- include_tasks: db_conf.yml
+

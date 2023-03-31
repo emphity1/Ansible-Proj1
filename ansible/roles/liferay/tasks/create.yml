@@ -1,0 +1,39 @@
+---
+
+    - name: Unzip tomcat
+      ansible.builtin.unarchive:
+        src: "{{ tomcatZip }}"
+        dest: /w1
+        remote_src: yes
+
+    - name: Rename tomcat
+      shell: mv /w1/{{ tomcatPackage }} /w1/tomcat
+
+    - name: Unzip osgi
+      ansible.builtin.unarchive:
+        src: "{{ osgiZip }}"
+        dest: /w1
+        remote_src: yes
+
+    - name: Rename osgi
+      shell: mv /w1/{{ osgiPackage }} /w1/osgi
+
+    - name: Creating folder configs
+      file:
+        path: /w1/osgi/configs
+        state: directory
+
+    - name: Creating folder config for portal-ext
+      file:
+        path: /w1/config
+        state: directory
+    
+
+    - name: Deleting webbapps/*
+      shell: rm -rf /w1/tomcat/webapps/* && mkdir /w1/tomcat/webapps/ROOT
+    
+    - name: Unzip war
+      ansible.builtin.unarchive:
+        src: "/{{ warZip }}"
+        dest: /w1/tomcat/webapps/ROOT
+        remote_src: yes

@@ -1,0 +1,109 @@
+# tasks file for /home/dima/Desktop/ansible/roles/liferay
+---
+
+- name: Importing necessary files
+  hosts: all
+  tasks:
+    - name: Prova 
+      debug:
+        msg: Prova variable {{tomcatZip}}
+
+
+
+****************************************************************************************
+*********************************
+*******************************************************
+****************************************************************************************
+
+
+
+# tasks file for /home/dima/Desktop/ansible/roles/liferay
+---
+
+
+
+
+
+
+- name: Importing necessary files
+  hosts: all
+  tasks:
+    - name: Unzip tomcat
+      ansible.builtin.unarchive:
+        src: "{{ tomcatZip }}"
+        dest: /w1
+        remote_src: yes
+
+    - name: Rename tomcat
+      shell: mv /w1/{{ tomcatPackage }} /w1/tomcat
+
+    - name: Unzip osgi
+      ansible.builtin.unarchive:
+        src: "{{ osgiZip }}"
+        dest: /w1
+        remote_src: yes
+
+    - name: Rename osgi
+      shell: mv /w1/{{ osgiPackage }} /w1/osgi
+
+    - name: Creating folder configs
+      file:
+        path: /w1/osgi/configs
+        state: directory
+
+    - name: Creating folder config for portal-ext
+      file:
+        path: /w1/config
+        state: directory
+    
+
+    - name: Deleting webbapps/*
+      shell: rm -rf /w1/tomcat/webapps/* && mkdir /w1/tomcat/webapps/ROOT
+    
+    - name: Unzip war
+      ansible.builtin.unarchive:
+        src: "/{{ warZip }}"
+        dest: /w1/tomcat/webapps/ROOT
+        remote_src: yes
+
+    - name: Backup bin files
+      shell: |
+        mv -v /{{bin_path}}/startup.sh /{{bin_path}}/startup_backup.sh
+        mv -v /{{bin_path}}/shutdown.sh /{{bin_path}}/shutdown_backup.sh
+
+
+    - name: Backup conf files
+      shell: |
+        mv -v /{{conf_path}}/server.xml /{{conf_path}}/server_backup.xml 
+        mv -v /{{conf_path}}/logging.properties /{{conf_path}}/logging_backup.properties
+        mv -v /{{conf_path}}/catalina.properties /{{conf_path}}/catalina_backup.properties
+
+  
+    - name: Importing bin files
+      copy:
+        src: "/{{ item }}"
+        dest: "/{{bin_path}}"
+        remote_src: true
+      with_items:
+        - /{{main_path}}/setenv.sh
+        - /{{main_path}}/startup.sh
+        - /{{main_path}}/shutdown.sh
+
+    - name: Importing conf files
+      copy:
+        src: "/{{ item }}"
+        dest: "/{{conf_path}}"
+        remote_src: true
+      with_items:
+        - /{{main_path}}/server.xml
+        - /{{main_path}}/logging.properties
+        - /{{main_path}}/catalina.properties
+
+    - name: Importing portal files
+      shell: 
+        cp -v /{{ main_path }}/portal-ext.properties /w1 && cp -v /{{ main_path }}/portal-runtime.properties /w1/config
+    
+        
+
+      
+    

@@ -1,0 +1,14 @@
+---
+# vars file for /home/dima/Desktop/ansible/roles/postgres
+
+
+postgresql_version: "12"
+
+#DB
+ip_db_host1: 10.4.1.233
+db_name: liferay1
+db_user: liferay1
+db_password: liferay1
+
+ansible_python_interpreter: /usr/bin/python3.10
+

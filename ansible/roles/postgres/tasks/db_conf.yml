@@ -1,0 +1,75 @@
+---
+
+
+# per installare: ansible-galaxy collection install community.postgresql
+#Create DB and USER
+
+- name: Configure PostgreSQl authentication
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_pg_hba:
+    dest: /var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf
+    contype: host
+    users: all
+    databases: all
+    source: "{{ ip_db_host1 }}/8"
+    method: peer
+
+- name: Create database 
+  community.general.postgresql_db:
+     state: present
+     name: "{{ db_name }}"
+  become: true
+  become_user: postgres
+
+- name: Create user
+  community.general.postgresql_user:
+    state: present
+    name: "{{ db_user}}"
+    password: "{{ db_password }}"
+  become: true
+  become_user: postgres
+
+- name: Grand db user access to db
+  community.general.postgresql_privs:
+    database:  "{{ db_name }}"
+    roles:  "{{ db_user }}"
+    privs:  all
+    type: database 
+  become: true
+  become_user: postgres 
+
+
+
+- name: Configure PostgreSQl authentication
+  community.postgresql.postgresql_pg_hba:
+    dest: /var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf
+    contype: host
+    users: all
+    databases: all
+    source: "{{ ip_db_host1 }}/8"
+    method: md5
+  become: true 
+  become_user: postgres
+  notify: restart postgres
+
+
+
+
+
+
+
+
+
+
+#- name: Configure PostgreSQL authentication
+ # become_user: postgres
+  #lineinfile:
+   # path: /var/lib/pgsql/{{ postgresql_version }}/data/pg_hba.conf
+    #line: host   all   all   {{ip_db_host1}}/8   peer
+
+
+
+
+
+

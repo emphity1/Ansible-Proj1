@@ -1,0 +1,38 @@
+---
+
+    - name: Backup bin files
+      shell: |
+        mv -v /{{bin_path}}/startup.sh /{{bin_path}}/startup_backup.sh
+        mv -v /{{bin_path}}/shutdown.sh /{{bin_path}}/shutdown_backup.sh
+
+
+    - name: Backup conf files
+      shell: |
+        mv -v /{{conf_path}}/server.xml /{{conf_path}}/server_backup.xml 
+        mv -v /{{conf_path}}/logging.properties /{{conf_path}}/logging_backup.properties
+        mv -v /{{conf_path}}/catalina.properties /{{conf_path}}/catalina_backup.properties
+
+  
+    - name: Importing bin files
+      copy:
+        src: "/{{ item }}"
+        dest: "/{{bin_path}}"
+        remote_src: true
+      with_items:
+        - /{{main_path}}/setenv.sh
+        - /{{main_path}}/startup.sh
+        - /{{main_path}}/shutdown.sh
+
+    - name: Importing conf files
+      copy:
+        src: "/{{ item }}"
+        dest: "/{{conf_path}}"
+        remote_src: true
+      with_items:
+        - /{{main_path}}/server.xml
+        - /{{main_path}}/logging.properties
+        - /{{main_path}}/catalina.properties
+
+    - name: Importing portal files
+      shell: 
+        cp -v /{{ main_path }}/portal-ext.properties /w1 && cp -v /{{ main_path }}/portal-runtime.properties /w1/config

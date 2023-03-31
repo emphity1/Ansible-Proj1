@@ -1,0 +1,6 @@
+---
+
+- hosts: AnsibleClients
+  roles:
+    
+    - {role: postgres, become: yes}
