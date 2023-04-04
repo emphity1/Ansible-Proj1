@@ -1,10 +1,13 @@
 
 
-tomcatZip: /tmp/materiale/apache-tomcat-9.0.73.zip
+tomcatZip: /tmp/materialeDXP7.4/apache-tomcat-9.0.73.zip
 tomcatPackage: apache-tomcat-9.0.73
-osgiZip: /tmp/materiale/DXP7.4_etc/liferay-dxp-osgi-7.4.13.u67-20230308143615766.zip
+osgiZip: /tmp/materialeDXP7.4/liferay-dxp-osgi-7.4.13.u67-20230308143615766.zip
 osgiPackage: liferay-dxp-osgi-7.4.13.u67
-warZip: /tmp/materiale/DXP7.4_etc/liferay-dxp-7.4.13.u67-20230308143615766.war
-main_path: /tmp/materiale/LiferayConfigs/DXP7.4
+warZip: /tmp/materialeDXP7.4/liferay-dxp-7.4.13.u67-20230308143615766.war
+main_path: /tmp/materialeDXP7.4/LiferayConfigs/DXP7.4
 bin_path: /w1/tomcat/bin
 conf_path: /w1/tomcat/conf/
+
+
+#ansible_python_interpreter: /usr/bin/python3

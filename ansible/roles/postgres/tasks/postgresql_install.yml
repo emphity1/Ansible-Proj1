@@ -10,9 +10,14 @@
       - postgresql{{postgresql_version}}-server
     state: present
 
+- name: Give permission -R to postgres
+  shell: chown -R postgres:postgres /usr/pgsql-{{ postgresql_version }}
+
+- name: Install psycopg2
+  shell: yum -y install python3-psycopg2
+
 - name: Initialize PostgreSQL database
-  become_user: postgres
-  command: /usr/pgsql-{{ postgresql_version }}/bin/initdb -D /var/lib/pgsql/{{ postgresql_version }}/data
+  command: /usr/pgsql-{{ postgresql_version }}/bin/postgresql-12-setup initdb #-D /var/lib/pgsql/{{ postgresql_version }}/data
   
 - name: Start PostgreSQL service
   systemd:
@@ -20,12 +25,20 @@
     state: started
     enabled: true
 
+
 - name: Configure PostgreSQL
   become_user: postgres
   lineinfile:
     path: /var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf
-    regexp: ^#?listen_addresses\s*=\s*'\*'
+    regexp: ^#?listen_addresses\s*=\s*'localhost'
     line: listen_addresses = '*'
+
+- name: Configure 
+  become_user: postgres
+  lineinfile:
+    path: /var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf
+    regexp: ^#?port\s*=\s*5432
+    line: port = 5432
 
  
 

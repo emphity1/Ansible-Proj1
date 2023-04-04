@@ -6,6 +6,8 @@
         mv -v /{{bin_path}}/shutdown.sh /{{bin_path}}/shutdown_backup.sh
 
 
+######## AGGIUNGERE com.portal...blabla 
+
     - name: Backup conf files
       shell: |
         mv -v /{{conf_path}}/server.xml /{{conf_path}}/server_backup.xml 

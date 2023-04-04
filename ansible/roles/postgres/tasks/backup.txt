@@ -1,0 +1,16 @@
+---
+
+
+- name: Configure PostgreSQL
+  become_user: postgres
+  lineinfile:
+    path: /var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf
+    regexp: ^#?listen_addresses\s*=\s*'localhost'
+    line: listen_addresses = '*'
+
+- name: Configure 
+  become_user: postgres
+  lineinfile:
+    path: /var/lib/pgsql/{{ postgresql_version }}/data/postgresql.conf
+    regexp: ^#?port\s*=\s*5432
+    line: port = 5432

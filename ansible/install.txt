@@ -1,0 +1,14 @@
+installre python su entrambe le macchine
+centos:
+https://vinodpandey.com/how-to-install-python3-on-centos-7/
+
+
+python3 -m pip install ipaddress
+pip install ipaddress
+
+
+#per psycog
+
+yum install python3-pip -y
+pip install --upgrade setuptools
+yum install postgresql-devel

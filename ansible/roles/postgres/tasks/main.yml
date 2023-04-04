@@ -2,5 +2,6 @@
 ---
 
 #- include_tasks: postgresql_install.yml
-- include_tasks: db_conf.yml
+#- include_tasks: db_conf.yml
+- include_tasks: prova.yml
 
